@@ -101,4 +101,22 @@ public class PatientFacadeREST extends AbstractFacade<Patient> {
         return appointments;
     }
     
+<<<<<<< HEAD
+=======
+    /**
+     * Este metodo se encarga de obtener todos los pacientes de un doctor en especifico
+     * @param usrn corresponde al nombre del doctor del cual se consultaran los pacientes
+     * @return una lista de tipo Patient que ocntiene todos los pacientes de ese doctor
+     */
+    @GET
+    @Path("/patientsof")
+    @Produces("application/json")
+    public List<Patient> getAllAppointmentsFor(
+            @QueryParam("username") String usrn) {
+        String sql = "SELECT p FROM Patient p WHERE p.doctorUsername = :usrn";
+        Query query = getEntityManager().createQuery(sql).setParameter("usrn", usrn);
+        List<Patient> apps = query.getResultList();
+        return apps;
+    }
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
 }

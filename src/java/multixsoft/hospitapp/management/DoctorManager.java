@@ -2,14 +2,23 @@ package multixsoft.hospitapp.management;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
+<<<<<<< HEAD
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.POST;
+=======
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import multixsoft.hospitapp.utilities.IntervalFilter;
 import multixsoft.hospitapp.webservice.AdapterRest;
+<<<<<<< HEAD
+=======
+import org.json.simple.JSONArray;
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -30,7 +39,11 @@ public class DoctorManager {
      */
     public DoctorManager() {
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
     /**
      * POST para crear una instancia de Doctor Manager
      * @param doc corresponde a la representacion del Doctor Manager que se creará
@@ -59,7 +72,11 @@ public class DoctorManager {
     		return null;
     	}
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
     /**
     * POST metodo para crear una instancia de Schedule Manager
     * @param sched es la representacion del Schedule Manager que se creará
@@ -72,12 +89,20 @@ public class DoctorManager {
         @QueryParam("schedule") String sched){
         AdapterRest adapter = new AdapterRest();
         try{
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
         	JSONObject scheduleObject = (JSONObject)new JSONParser().parse(sched);
                 scheduleObject = parseInterval(scheduleObject);
                 String path = "schedule/" + scheduleObject.get("idSchedule");
         	JSONObject scheduleRequest = (JSONObject) adapter.get(path);
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
         	if(scheduleRequest == null || scheduleRequest.isEmpty()){
                     path = "schedule";
                     adapter.post(path, scheduleObject.toJSONString());
@@ -91,7 +116,11 @@ public class DoctorManager {
              return null;
         }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
     private JSONObject parseInterval(JSONObject obj) {
         IntervalFilter filter = new IntervalFilter();
         String monday = filter.getIntervalFromHours((String) obj.get("monday"));
@@ -107,4 +136,64 @@ public class DoctorManager {
         obj.put("friday", friday);
         return obj;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Este metodo se encarga de obtener todos los pacientes de un doctor del lado
+     * del servidor
+     * @param usrn corresponde al doctor del cual se requieren los pacientes
+     * @return una variable de tipo String con todos los pacientes de ese doctor
+     */
+    @GET
+    @Path("/patientsfor")
+    @Produces("application/json")
+    public String getAllPatientsFor(@QueryParam("username") String usrn) {
+        AdapterRest adapter = new AdapterRest();
+        String path = "patient/patientsof?username=" + usrn;
+        JSONArray array = (JSONArray)adapter.get(path);
+        if (array.isEmpty()) {
+            return null;
+        }
+        return array.toJSONString();
+    }
+
+    /**
+     * Este metodo se encarga de obtener todos los pacientes de un doctor del lado
+     * del servidor
+     * @param idschedule corresponde al doctor del cual se requieren los pacientes
+     * @return una variable de tipo String con todos los pacientes de ese doctor
+     */
+    @GET
+    @Path("/removescheduleofdoctor")
+    @Produces("text/plain")
+    public boolean removeScheduleOfDoctor(@QueryParam("idschedule") String idschedule) {
+        AdapterRest adapter = new AdapterRest();
+        String path = "schedule/id=" + idschedule;
+        if(adapter.delete(path)){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Este metodo modifica a false la variable isActive de un doctor
+     * @param username corresponde al nombre de usuario del doctor que se desea 
+     * modificar
+     * @return una variable de tipo booleano que indica si se pudo modificar o 
+     * no
+     */
+    @GET
+    @Path("/makedoctorinactive")
+    @Produces("text/plain")
+    public boolean makeDoctorInactive(@QueryParam("doctor") String username) {
+        AdapterRest adapter = new AdapterRest();
+        JSONObject doctor = (JSONObject) adapter.get("doctor/" + username);
+         if(doctor.isEmpty()){
+            return false;
+        }
+        doctor.put("isActive", "false");
+        return adapter.put("doctor/" + username, doctor.toJSONString());
+    }
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
 }

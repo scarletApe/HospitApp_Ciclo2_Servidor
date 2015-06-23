@@ -9,6 +9,10 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+<<<<<<< HEAD
+=======
+import javax.persistence.Query;
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +21,11 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+<<<<<<< HEAD
+=======
+import javax.ws.rs.QueryParam;
+import multixsoft.hospitapp.entities.Appointment;
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
 import multixsoft.hospitapp.entities.Report;
 
 /**
@@ -80,6 +89,20 @@ public class ReportFacadeREST extends AbstractFacade<Report> {
     public String countREST() {
         return String.valueOf(super.count());
     }
+<<<<<<< HEAD
+=======
+    
+    @GET
+    @Path("findbyappointment")
+    @Produces({"application/xml", "application/json"})
+    public Report findreportByAppointment(@QueryParam("idAppointment") String appointment) {
+        Report r = null;
+        String sql = "SELECT r FROM Report r WHERE r.idAppointment.idAppointment = :appointment";
+        Query query = getEntityManager().createQuery(sql).setParameter("appointment", appointment);
+        r = (Report)query.getSingleResult();
+        return r;
+    }
+>>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
 
     @Override
     protected EntityManager getEntityManager() {

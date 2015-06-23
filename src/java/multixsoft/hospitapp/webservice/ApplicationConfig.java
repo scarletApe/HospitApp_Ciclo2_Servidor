@@ -30,8 +30,8 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(multixsoft.hospitapp.management.DoctorManager.class);
-        resources.add(multixsoft.hospitapp.management.PatientManager.class);
-        resources.add(multixsoft.hospitapp.management.PatientMapper.class);
+        resources.add(multixsoft.hospitapp.management.PatientDataRecorder.class);
+        resources.add(multixsoft.hospitapp.management.PatientManager.class)resources.add(multixsoft.hospitapp.management.PatientMapper.class);
         resources.add(multixsoft.hospitapp.management.ScheduleManager.class);
         resources.add(multixsoft.hospitapp.receiver.PrivacyControl.class);
         resources.add(multixsoft.hospitapp.webservice.AdminFacadeREST.class);
