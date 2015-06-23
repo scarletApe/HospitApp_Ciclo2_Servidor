@@ -153,7 +153,8 @@ public class Appointment implements Serializable {
 
     @Override
     public String toString() {
-        return "multixsoft.hospitapp.entities.Appointment[ idAppointment=" + idAppointment + " ]";
+        String active = iscanceled?"Su cita se encuentra vigente":"Su cita ha sido cancelada";
+        return "Folio:" + idAppointment + "\nFecha:" + date + "\nHora:" + time + "\n" + active;
     }
     
 }

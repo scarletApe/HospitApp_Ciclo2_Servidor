@@ -1,12 +1,22 @@
 package multixsoft.hospitapp.management;
 
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
 import java.util.Calendar;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.ws.rs.GET;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import multixsoft.hospitapp.entities.Appointment;
 import multixsoft.hospitapp.utilities.Date;
 import multixsoft.hospitapp.utilities.IntervalFilter;
 import multixsoft.hospitapp.webservice.AdapterRest;
@@ -279,5 +289,60 @@ public class ScheduleManager {
             }
         }
         return false;
+    }
+    
+    @GET
+    @Path("/notificatechange")
+    @Produces("text/plain")
+    public boolean notificateChange(@QueryParam("appointment") String appointment) {
+        JSONObject obj = ((JSONObject)JSONValue.parse(appointment));
+        Appointment app = (Appointment)adapter.get("appointment/" + obj.get("idAppointment"));
+        
+        //TODO
+        String email = "";
+        String pass = "";
+        
+        String recipient = app.getPatientNss().getAddress();
+        String txt = "Estimado derechohabiente del Insituto Mexicano del Seguro Social (IMSS), nos permitimos informarle por este medio que su cita fue actualizada a solicitud de nuestro personal.";
+        txt += "\nEstos son los datos de su nueva cita:\n";
+        txt += app.toString();
+        txt += "\n\n IMSS";
+        
+        final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+        // Get a Properties object
+        Properties props = System.getProperties();
+        props.setProperty("mail.smtp.host", "smtp.gmail.com");
+        props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+        props.setProperty("mail.smtp.socketFactory.fallback", "false");
+        props.setProperty("mail.smtp.port", "465");
+        props.setProperty("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.debug", "true");
+        props.put("mail.store.protocol", "pop3");
+        props.put("mail.transport.protocol", "smtp");
+        final String username = email;
+        final String password = pass;
+        try {
+            Session session = Session.getDefaultInstance(props, new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
+
+            Message msg = new MimeMessage(session);
+
+            msg.setFrom(new InternetAddress(username));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient, false));
+            
+            msg.setSubject("Notificación de cambio en cita médica");
+            msg.setText(txt);
+            msg.setSentDate(new java.util.Date());
+            Transport.send(msg);
+            //System.out.println("Message sent.");
+        } catch (MessagingException e) {
+            System.err.println("Error: " + e);
+            return false;
+        }
+        return true;
     }
 }
