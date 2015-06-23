@@ -1,11 +1,21 @@
 package multixsoft.hospitapp.receiver;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import multixsoft.hospitapp.utilities.AESCipher;
 import multixsoft.hospitapp.webservice.AdapterRest;
 import org.json.simple.JSONObject;
 
@@ -21,6 +31,7 @@ public class PrivacyControl {
     @Context
     private UriInfo context;
     private AdapterRest adapter;
+    private byte [] key = "instutomexsegsoc".getBytes();
 
     public PrivacyControl() {
         adapter = new AdapterRest();
@@ -29,11 +40,11 @@ public class PrivacyControl {
     @Path("accessaspatient")
     @Produces("text/plain")
     public int accessAsPatient( @QueryParam("nss") String nss, 
-            @QueryParam("password") String password) {
+            @QueryParam("password") byte [] password) {
         if(!isValid(nss)){
             return -1;
         }
-        if(!isValid(decrypt(password, "key", "256"))) {
+        if(!isValid(new String(decrypt(password, key)))) {
             return -1;
         }        
         
@@ -52,11 +63,12 @@ public class PrivacyControl {
     @Path("accessasadmindoctor")
     @Produces("text/plain")
     public int accessAsAdminDoctor(@QueryParam("username") String username, 
-            @QueryParam("password") String password) {
+            @QueryParam("password") byte [] password) {
         if(!isValid(username)){
             return -1;
         }
-        if(!isValid(decrypt(password, "key", "256"))) {
+        
+        if(!isValid(new String(decrypt(password, key)))) {
             return -1;
         }
         JSONObject doctor = (JSONObject)adapter.get("doctor/"+username);
@@ -75,15 +87,46 @@ public class PrivacyControl {
         return -1;
     }
     
-    public String encrypt(String text, String key, String bits) {
-        return text;
+    public byte [] encrypt(byte [] text, byte [] key) {
+        try {
+            return AESCipher.encrypt(key, key, text);
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | 
+                InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | 
+                BadPaddingException ex) {
+            System.err.println("Error durante el encriptado");
+            Logger.getLogger(PrivacyControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
-    public String decrypt(String text, String key, String bits) {
-        return text;
+    public byte [] decrypt(byte [] text, byte [] key) {
+        try {
+            return AESCipher.decrypt(key, key, text);
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | 
+                InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | 
+                BadPaddingException ex) {
+            Logger.getLogger(PrivacyControl.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Error durante el desencriptado");
+        }
+        return null;
     }
     
     private boolean isValid(String string) {
+        if(string.contains(";")) {
+            return false;
+        }
+        
+        if(string.contains("--")) {
+            return false;
+        }
+        
+        if(string.contains("/*")) {
+            return false;
+        }
+        
+        if(string.contains("==")) {
+            return false;
+        }
         return true;
     }
 }
