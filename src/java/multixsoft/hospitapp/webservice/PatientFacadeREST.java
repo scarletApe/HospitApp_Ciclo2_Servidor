@@ -101,8 +101,6 @@ public class PatientFacadeREST extends AbstractFacade<Patient> {
         return appointments;
     }
     
-<<<<<<< HEAD
-=======
     /**
      * Este metodo se encarga de obtener todos los pacientes de un doctor en especifico
      * @param usrn corresponde al nombre del doctor del cual se consultaran los pacientes
@@ -118,5 +116,4 @@ public class PatientFacadeREST extends AbstractFacade<Patient> {
         List<Patient> apps = query.getResultList();
         return apps;
     }
->>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
 }

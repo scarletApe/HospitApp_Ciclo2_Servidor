@@ -3,14 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Ivan%20Tovar/Documents/NetBeansProjects/HospitAppServer/src/java/multixsoft/hospitapp/management/ScheduleManager.java</file>
-=======
             <file>file:/C:/Users/YONY/Documents/NetBeansProjects/HospitAppServer-server_it/HospitAppServer-server_it/src/java/multixsoft/hospitapp/management/PatientDataRecorder.java</file>
             <file>file:/C:/Users/YONY/Documents/NetBeansProjects/HospitAppServer-server_it/HospitAppServer-server_it/src/java/multixsoft/hospitapp/management/DoctorManager.java</file>
             <file>file:/C:/Users/YONY/Documents/NetBeansProjects/HospitAppServer-server_it/HospitAppServer-server_it/src/java/multixsoft/hospitapp/management/ScheduleManager.java</file>
             <file>file:/C:/Users/YONY/Documents/NetBeansProjects/HospitAppServer-server_it/HospitAppServer-server_it/src/java/multixsoft/hospitapp/webservice/DoctorFacadeREST.java</file>
->>>>>>> 735a05af449ba0a4479b34212e8a0c21d8a07236
         </group>
     </open-files>
 </project-private>
